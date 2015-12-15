@@ -41,7 +41,6 @@ class Acgapc extends Module
 		$customer = $params['newCustomer'];
 		$postcode = Tools::getValue('postcode');
 		$cp_array = unserialize(Configuration::get('acgapc_pcs'));
-		echo 'Postcode: '.$postcode.' cps: '.$cp_array;
 		if (in_array($postcode, $cp_array)) {
 			$customer->addGroups(array((int)Configuration::get('acgapc_ugid')));
 		}
