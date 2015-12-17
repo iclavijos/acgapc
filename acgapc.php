@@ -37,12 +37,20 @@ class Acgapc extends Module
 	  return true;
 	}
 
+	private function setDefaultGroupId($customer_id,$id_default_group) {
+	  Db::getInstance()->update('customer', array(
+		'id_default_group' => $id_default_group,
+	  ), '`id_customer` = '.(int)$customer_id);
+	}
+
 	public function hookActionCustomerAccountAdd($params) {
 		$customer = $params['newCustomer'];
 		$postcode = Tools::getValue('postcode');
 		$cp_array = unserialize(Configuration::get('acgapc_pcs'));
 		if (in_array($postcode, $cp_array)) {
-			$customer->addGroups(array((int)Configuration::get('acgapc_ugid')));
+			$new_group_id = (int)Configuration::get('acgapc_ugid');
+			$customer->updateGroup(array($new_group_id));
+			$this->setDefaultGroupId($customer->id, $new_group_id);
 		}
 		return true;
 	}
